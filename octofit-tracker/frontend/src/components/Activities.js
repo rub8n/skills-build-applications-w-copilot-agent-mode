@@ -1,0 +1,36 @@
+import React, { useEffect, useState } from 'react';
+
+function Activities() {
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/api/activities/')
+      .then(response => response.json())
+      .then(data => setActivities(data))
+      .catch(error => console.error('Error fetching activities:', error));
+  }, []);
+
+  return (
+    <div className="container mt-4">
+      <h1 className="text-center mb-4">Activities</h1>
+      <table className="table table-striped table-bordered">
+        <thead className="table-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Activity Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {activities.map((activity, index) => (
+            <tr key={activity.id}>
+              <th scope="row">{index + 1}</th>
+              <td>{activity.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default Activities;
