@@ -33,8 +33,8 @@ class Command(BaseCommand):
 
         # Create teams
         teams = [
-            Team(name='Blue Team', members=[]),
-            Team(name='Gold Team', members=[])
+            Team(name='Blue Team', members=""),
+            Team(name='Gold Team', members="")
         ]
 
         # Save teams individually to ensure compatibility with SQLite
