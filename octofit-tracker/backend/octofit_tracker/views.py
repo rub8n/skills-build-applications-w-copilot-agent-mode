@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.response import Response
 from django.http import JsonResponse
 from django.conf import settings
 from .models import User, Team, Activity, Leaderboard, Workout
@@ -13,8 +14,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['codespace_url'] = get_codespace_url()
-        return response
+        return Response({
+            'codespace_url': get_codespace_url(),
+            'data': response.data
+        })
 
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
@@ -22,8 +25,10 @@ class TeamViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['codespace_url'] = get_codespace_url()
-        return response
+        return Response({
+            'codespace_url': get_codespace_url(),
+            'data': response.data
+        })
 
 class ActivityViewSet(viewsets.ModelViewSet):
     queryset = Activity.objects.all()
@@ -31,8 +36,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['codespace_url'] = get_codespace_url()
-        return response
+        return Response(response.data)  # Return serialized data directly
 
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = Leaderboard.objects.all()
@@ -40,8 +44,10 @@ class LeaderboardViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['codespace_url'] = get_codespace_url()
-        return response
+        return Response({
+            'codespace_url': get_codespace_url(),
+            'data': response.data
+        })
 
 class WorkoutViewSet(viewsets.ModelViewSet):
     queryset = Workout.objects.all()
@@ -49,5 +55,7 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['codespace_url'] = get_codespace_url()
-        return response
+        return Response({
+            'codespace_url': get_codespace_url(),
+            'data': response.data
+        })

@@ -4,9 +4,9 @@ function Workouts() {
   const [workouts, setWorkouts] = useState([]);
 
   useEffect(() => {
-    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/api/workouts/')
+    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/workouts/')
       .then(response => response.json())
-      .then(data => setWorkouts(data))
+      .then(data => setWorkouts(data.data || data))
       .catch(error => console.error('Error fetching workouts:', error));
   }, []);
 
@@ -26,7 +26,7 @@ function Workouts() {
             <tr key={workout.id}>
               <th scope="row">{index + 1}</th>
               <td>{workout.name}</td>
-              <td>{workout.description}</td>
+              <td>{workout.description || 'No description available'}</td>
             </tr>
           ))}
         </tbody>

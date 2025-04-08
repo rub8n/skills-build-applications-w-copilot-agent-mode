@@ -1,13 +1,14 @@
 from djongo import models
 
 class User(models.Model):
+    id = models.AutoField(primary_key=True)
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
 
 class Team(models.Model):
     name = models.CharField(max_length=255)
-    members = models.JSONField()
+    members = models.TextField()  # Changed from JSONField to TextField for SQLite compatibility
 
 class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

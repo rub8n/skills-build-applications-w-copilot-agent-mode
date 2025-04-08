@@ -4,9 +4,9 @@ function Users() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/api/users/')
+    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/users/')
       .then(response => response.json())
-      .then(data => setUsers(data))
+      .then(data => setUsers(data.data || data))
       .catch(error => console.error('Error fetching users:', error));
   }, []);
 
@@ -17,7 +17,7 @@ function Users() {
         <thead className="table-dark">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Username</th>
+            <th scope="col">Name</th>
             <th scope="col">Email</th>
           </tr>
         </thead>
@@ -25,7 +25,7 @@ function Users() {
           {users.map((user, index) => (
             <tr key={user.id}>
               <th scope="row">{index + 1}</th>
-              <td>{user.username}</td>
+              <td>{user.name}</td>
               <td>{user.email}</td>
             </tr>
           ))}

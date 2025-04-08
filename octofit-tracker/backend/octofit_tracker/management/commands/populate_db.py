@@ -1,35 +1,33 @@
 from django.core.management.base import BaseCommand
 from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
 from django.conf import settings
-from pymongo import MongoClient
 from datetime import timedelta
-from bson import ObjectId
+from django.db import connection
 
 class Command(BaseCommand):
     help = 'Populate the database with test data for users, teams, activities, leaderboard, and workouts'
 
     def handle(self, *args, **kwargs):
-        # Connect to MongoDB
-        client = MongoClient(settings.DATABASES['default']['HOST'], settings.DATABASES['default']['PORT'])
-        db = client[settings.DATABASES['default']['NAME']]
+        # Removed MongoDB-specific code as we are now using SQLite
+        # No need to connect to MongoDB or drop collections
 
-        # Drop existing collections
-        db.users.drop()
-        db.teams.drop()
-        db.activity.drop()
-        db.leaderboard.drop()
-        db.workouts.drop()
+        # Clear all objects in SQLite database
+        User.objects.all().delete()
+        Team.objects.all().delete()
+        Activity.objects.all().delete()
+        Leaderboard.objects.all().delete()
+        Workout.objects.all().delete()
 
-        # Create users
+        # Use get_or_create to avoid duplicate User entries
         users = [
-            User(email='thundergod@octofit.edu', name='Thundergod', password='thundergodpassword'),
-            User(email='metalgeek@octofit.edu', name='Metalgeek', password='metalgeekpassword'),
-            User(email='zerocool@octofit.edu', name='Zerocool', password='zerocoolpassword'),
-            User(email='crashoverride@octofit.edu', name='Crashoverride', password='crashoverridepassword'),
-            User(email='sleeptoken@octofit.edu', name='Sleeptoken', password='sleeptokenpassword'),
+            User.objects.get_or_create(email='thundergod@octofit.edu', defaults={'name': 'Thundergod', 'password': 'thundergodpassword'})[0],
+            User.objects.get_or_create(email='metalgeek@octofit.edu', defaults={'name': 'Metalgeek', 'password': 'metalgeekpassword'})[0],
+            User.objects.get_or_create(email='zerocool@octofit.edu', defaults={'name': 'Zerocool', 'password': 'zerocoolpassword'})[0],
+            User.objects.get_or_create(email='crashoverride@octofit.edu', defaults={'name': 'Crashoverride', 'password': 'crashoverridepassword'})[0],
+            User.objects.get_or_create(email='sleeptoken@octofit.edu', defaults={'name': 'Sleeptoken', 'password': 'sleeptokenpassword'})[0],
         ]
 
-        # Save users individually to ensure they are persisted in the database
+        # Explicitly save all User objects to ensure they are properly initialized
         for user in users:
             user.save()
 
@@ -38,35 +36,38 @@ class Command(BaseCommand):
             Team(name='Blue Team', members=[]),
             Team(name='Gold Team', members=[])
         ]
-        Team.objects.bulk_create(teams)
 
-        # Create activities
+        # Save teams individually to ensure compatibility with SQLite
+        for team in teams:
+            team.save()
+
+        # Ensure user field in Activity is assigned valid User instances
         activities = [
-            Activity(user=users[0], type='Cycling', duration=60, date='2025-04-01'),
-            Activity(user=users[1], type='Crossfit', duration=120, date='2025-04-02'),
-            Activity(user=users[2], type='Running', duration=90, date='2025-04-03'),
-            Activity(user=users[3], type='Strength', duration=30, date='2025-04-04'),
-            Activity(user=users[4], type='Swimming', duration=75, date='2025-04-05'),
+            Activity(user=User.objects.get(email='thundergod@octofit.edu'), type='Cycling', duration=60, date='2025-04-01'),
+            Activity(user=User.objects.get(email='metalgeek@octofit.edu'), type='Crossfit', duration=120, date='2025-04-02'),
+            Activity(user=User.objects.get(email='zerocool@octofit.edu'), type='Running', duration=90, date='2025-04-03'),
+            Activity(user=User.objects.get(email='crashoverride@octofit.edu'), type='Strength', duration=30, date='2025-04-04'),
+            Activity(user=User.objects.get(email='sleeptoken@octofit.edu'), type='Swimming', duration=75, date='2025-04-05'),
         ]
-        Activity.objects.bulk_create(activities)
+
+        # Save activities individually to ensure related user objects are properly associated
+        for activity in activities:
+            activity.save()
 
         # Create leaderboard entries
         leaderboard_entries = [
-            Leaderboard(_id=ObjectId(), user=users[0], score=100),
-            Leaderboard(_id=ObjectId(), user=users[1], score=90),
-            Leaderboard(_id=ObjectId(), user=users[2], score=95),
-            Leaderboard(_id=ObjectId(), user=users[3], score=85),
-            Leaderboard(_id=ObjectId(), user=users[4], score=80),
+            Leaderboard(team=teams[0], score=100),
+            Leaderboard(team=teams[1], score=90),
         ]
         Leaderboard.objects.bulk_create(leaderboard_entries)
 
         # Create workouts
         workouts = [
-            Workout(_id=ObjectId(), name='Cycling Training', description='Training for a road cycling event'),
-            Workout(_id=ObjectId(), name='Crossfit', description='Training for a crossfit competition'),
-            Workout(_id=ObjectId(), name='Running Training', description='Training for a marathon'),
-            Workout(_id=ObjectId(), name='Strength Training', description='Training for strength'),
-            Workout(_id=ObjectId(), name='Swimming Training', description='Training for a swimming competition'),
+            Workout(name='Cycling Training', description='Training for a road cycling event'),
+            Workout(name='Crossfit', description='Training for a crossfit competition'),
+            Workout(name='Running Training', description='Training for a marathon'),
+            Workout(name='Strength Training', description='Training for strength'),
+            Workout(name='Swimming Training', description='Training for a swimming competition'),
         ]
         Workout.objects.bulk_create(workouts)
 

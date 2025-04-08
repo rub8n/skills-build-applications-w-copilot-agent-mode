@@ -4,9 +4,9 @@ function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
 
   useEffect(() => {
-    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/api/leaderboard/')
+    fetch('https://potential-fortnight-r444jqx5gr53vj5-8000.app.github.dev/leaderboards/')
       .then(response => response.json())
-      .then(data => setLeaderboard(data))
+      .then(data => setLeaderboard(data.data))
       .catch(error => console.error('Error fetching leaderboard:', error));
   }, []);
 
@@ -17,16 +17,16 @@ function Leaderboard() {
         <thead className="table-dark">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Username</th>
             <th scope="col">Score</th>
+            <th scope="col">Team Name</th>
           </tr>
         </thead>
         <tbody>
           {leaderboard.map((entry, index) => (
             <tr key={entry.id}>
               <th scope="row">{index + 1}</th>
-              <td>{entry.username}</td>
               <td>{entry.score}</td>
+              <td>{entry.team_name}</td>
             </tr>
           ))}
         </tbody>
