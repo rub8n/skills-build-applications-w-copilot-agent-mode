@@ -1,0 +1,16 @@
+:root {
+  --background-color: #000; /* Black background */
+  --text-color: #fff; /* White text */
+  --primary-color: #e10600; /* Formula 1 red */
+  --secondary-color: #1e1e1e; /* Dark gray */
+  --hover-color: #c00000; /* Darker red for hover */
+  --font-family: 'Roboto', sans-serif; /* Modern font */
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+}

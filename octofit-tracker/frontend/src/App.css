@@ -1,11 +1,16 @@
+@import './theme.css';
+
 body {
-  background-color: #f0f8ff; /* Light blue background */
-  color: #333; /* Dark text color for readability */
-  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #2c3e50; /* Darker blue for headings */
+  color: var(--primary-color);
+  font-weight: bold;
 }
 
 .App {
@@ -24,7 +29,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .App-header {
-  background-color: #34495e; /* Dark blue-gray */
+  background-color: var(--background-color); /* Use the dark theme background */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -44,52 +49,72 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .table {
-  background-color: #ffffff; /* White table background */
-  border: 1px solid #ddd; /* Light gray border */
+  background-color: var(--background-color); /* Override Bootstrap's table background */
+  color: var(--text-color);
+  border: 1px solid var(--secondary-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add shadow */
 }
 
 .table th {
-  background-color: #2980b9; /* Blue header */
-  color: #fff; /* White text */
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em; /* Add spacing for a modern look */
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f2f2f2; /* Light gray for striped rows */
+  background-color: var(--secondary-color);
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem;
+  color: var(--text-color); /* Override Bootstrap's table text color */
+  background-color: var(--background-color); /* Override Bootstrap's table background color */
 }
 
 button {
-  background-color: #3498db; /* Blue button */
-  color: #fff; /* White text */
+  background: linear-gradient(90deg, var(--primary-color), var(--hover-color)); /* Add gradient */
+  color: var(--text-color);
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add smooth transition */
 }
 
 button:hover {
-  background-color: #2980b9; /* Darker blue on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow on hover */
 }
 
 nav {
-  background-color: #2c3e50; /* Dark blue-gray navigation */
-  color: #ecf0f1; /* Light text */
-  padding: 10px;
+  background: linear-gradient(90deg, var(--secondary-color), var(--background-color)); /* Add gradient */
+  color: var(--text-color) !important; /* Force dark theme text color */
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add shadow */
+  border-bottom: 1px solid var(--secondary-color); /* Add subtle border */
 }
 
 nav img {
-  height: 40px;
+  height: 50px;
 }
 
 nav a {
-  color: #ecf0f1;
-  margin: 0 10px;
+  color: var(--text-color);
+  margin: 0 15px;
+  text-decoration: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: color 0.2s ease; /* Add smooth transition */
 }
 
 nav a:hover {
-  color: #3498db; /* Blue on hover */
+  color: var(--primary-color); /* Highlight on hover */
 }
 
 @keyframes App-logo-spin {
@@ -99,4 +124,14 @@ nav a:hover {
   to {
     transform: rotate(360deg);
   }
+}
+
+footer {
+  background-color: var(--background-color); /* Match the dark theme */
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
